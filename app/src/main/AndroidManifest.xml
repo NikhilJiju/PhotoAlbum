@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlbumPhoto"></activity>
+        <activity android:name=".AlbumPhoto" />
+        <activity android:name=".DisplayPhoto"></activity>
     </application>
 
 </manifest>

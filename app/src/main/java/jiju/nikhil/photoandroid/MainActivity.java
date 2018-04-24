@@ -57,15 +57,6 @@ public class MainActivity extends AppCompatActivity {
         else{
             user= new User();
         }
-        Button open = (Button) findViewById(R.id.open);
-        open.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photoIntent= new Intent(getApplicationContext(), AlbumPhoto.class);
-                startActivity(photoIntent);
-                //setContentView(R.layout.album_photo);
-            }
-        });
 
         Button add = (Button) findViewById(R.id.add);
         add.setOnClickListener(new OnClickListener() {

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +44,7 @@ public class AlbumPhoto extends AppCompatActivity {
         //setting listview
         Photo one= new Photo("barnacles",R.drawable.doggy);
         album.photos.add(one);
-        ListView thephotos= (ListView) findViewById(R.id.thephotos);
+        final ListView thephotos= (ListView) findViewById(R.id.thephotos);
         MyAdapter myAdapter= new MyAdapter(AlbumPhoto.this,album.photos);
         thephotos.setAdapter(myAdapter);
 
@@ -63,6 +64,17 @@ public class AlbumPhoto extends AppCompatActivity {
                 Button delete = (Button) findViewById(R.id.delete);
                 delete.setVisibility(View.INVISIBLE);
 
+            }
+        });
+
+        ////////ADD CODE HERE
+        Button add = (Button) findViewById(R.id.add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoIntent= new Intent(getApplicationContext(), AlbumPhoto.class);
+                startActivity(photoIntent);
+                //setContentView(R.layout.album_photo);
             }
         });
 
@@ -137,6 +149,16 @@ public class AlbumPhoto extends AppCompatActivity {
                     Button delete = (Button) findViewById(R.id.delete);
                     delete.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        final ListView photos= (ListView) findViewById(R.id.thephotos);
+        photos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DisplayPhoto.photo= (Photo) thephotos.getItemAtPosition(position);
+                Intent photoIntent= new Intent(getApplicationContext(), DisplayPhoto.class);
+                startActivity(photoIntent);
             }
         });
 
