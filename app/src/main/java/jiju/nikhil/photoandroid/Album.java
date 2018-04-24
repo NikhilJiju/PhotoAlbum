@@ -16,7 +16,7 @@ public class Album implements Serializable{
     /**
      * list of photos which the album contains
      */
-    ArrayList<Photo> photos;
+    ArrayList<Photo> photos= new ArrayList<Photo>();
     /**
      * constructor for creating an album object with a given name
      * @param name

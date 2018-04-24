@@ -33,20 +33,21 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ListView
+        android:id="@+id/thephotos"
         android:layout_width="295dp"
         android:layout_height="412dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
         app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.93"
-        tools:layout_editor_absoluteY="83dp"
-        tools:layout_editor_absoluteX="46dp" />
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="83dp" />
 
     <EditText
         android:id="@+id/name"

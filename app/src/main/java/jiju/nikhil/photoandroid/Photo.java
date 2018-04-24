@@ -10,5 +10,16 @@ public class Photo implements Serializable{
 
     private static final long serialVersionUID = -6601624970743555402L;
 
+    public String name;
+    public int photo;
+
+    public Photo(String name, int photo){
+        this.name= name;
+        this.photo=photo;
+    }
+
+    public String toString(){
+        return name;
+    }
 
 }

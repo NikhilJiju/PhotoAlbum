@@ -4,17 +4,26 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class AlbumPhoto extends AppCompatActivity {
@@ -30,6 +39,13 @@ public class AlbumPhoto extends AppCompatActivity {
         submit.setVisibility(View.INVISIBLE);
         cancel.setVisibility(View.INVISIBLE);
         name.setVisibility(View.INVISIBLE);
+
+        //setting listview
+        Photo one= new Photo("barnacles",R.drawable.doggy);
+        album.photos.add(one);
+        ListView thephotos= (ListView) findViewById(R.id.thephotos);
+        MyAdapter myAdapter= new MyAdapter(AlbumPhoto.this,album.photos);
+        thephotos.setAdapter(myAdapter);
 
         Button rename = (Button) findViewById(R.id.rename);
         rename.setOnClickListener(new View.OnClickListener() {
@@ -171,5 +187,44 @@ public class AlbumPhoto extends AppCompatActivity {
                 alert.show();
             }
         });
+    }
+    public class MyAdapter extends ArrayAdapter<Photo>{
+        ArrayList<Photo> photos;
+        Context mContext;
+        public MyAdapter(Context context, ArrayList<Photo> photos){
+            super(context,R.layout.listview_item);
+            this.photos= photos;
+            this.mContext= context;
+        }
+
+        @Override
+        public int getCount(){
+            return photos.size();
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            ViewHolder holder = new ViewHolder();
+            if (convertView == null) {
+                LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+                convertView = mInflater.inflate(R.layout.listview_item, parent, false);
+                holder.photo = (ImageView) convertView.findViewById(R.id.imageView);
+                holder.caption = (TextView) convertView.findViewById(R.id.textView);
+                convertView.setTag(holder);
+            }
+            else{
+                holder= (ViewHolder) convertView.getTag();
+            }
+            holder.photo.setImageResource(photos.get(position).photo);
+            holder.caption.setText(photos.get(position).name);
+            return convertView;
+        }
+
+        class ViewHolder{
+            ImageView photo;
+            TextView caption;
+        }
+
     }
 }
