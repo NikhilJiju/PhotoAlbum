@@ -48,7 +48,6 @@ public class adding_photo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adding_photo);
 
-
         Button browse = (Button) findViewById(R.id.browse);
         browse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,6 +274,15 @@ public class adding_photo extends AppCompatActivity {
                 System.out.println("Permission denied again");
             }
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(this, AlbumPhoto.class));
+        finish();
+
     }
 
 }

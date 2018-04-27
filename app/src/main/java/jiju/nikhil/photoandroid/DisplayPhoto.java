@@ -45,6 +45,9 @@ public class DisplayPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_photo);
 
+
+        Toast.makeText(getBaseContext(),"Swipe <-Left or Right-> on picture",Toast.LENGTH_SHORT).show();
+
         System.out.println("----------------------------"+photos.get(position).tagNames.size());
         List<Map<String,String>> data = new ArrayList<Map<String,String>>();
         for(int i=0;i<photos.get(position).tagNames.size();i++){
@@ -69,16 +72,18 @@ public class DisplayPhoto extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {}
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
-            public void onPageSelected(int position) {
+            public void onPageSelected(int position2) {
                 // Check if this is the page you want.
+                position=position2;
+                System.out.println("*****************************GOT TO PAGE # " + position2);
                 TextView texter= (TextView) findViewById(R.id.texter);
-                texter.setText(photos.get(position).name);
-                System.out.println("----------------------------"+photos.get(position).tagNames.size());
+                texter.setText(photos.get(position2).name);
+                System.out.println("----------------------------"+photos.get(position2).tagNames.size());
                 List<Map<String,String>> data = new ArrayList<Map<String,String>>();
-                for(int i=0;i<photos.get(position).tagNames.size();i++){
+                for(int i=0;i<photos.get(position2).tagNames.size();i++){
                     Map<String,String> dataMaps = new HashMap<String,String>(2);
-                    dataMaps.put("type",photos.get(position).tagNames.get(i));
-                    dataMaps.put("value",photos.get(position).tagValues.get(i));
+                    dataMaps.put("type",photos.get(position2).tagNames.get(i));
+                    dataMaps.put("value",photos.get(position2).tagValues.get(i));
                     data.add(dataMaps);
                     System.out.println("GOT HERE!!!!!");
                 }
@@ -210,6 +215,18 @@ public class DisplayPhoto extends AppCompatActivity {
                 if(!repeat){
                     photos.get(position).tagValues.add(tagvalue.getText().toString());
                     photos.get(position).tagNames.add(tagtype);
+                    try {
+                        File userInfo = new File(MainActivity.fileName);
+                        FileOutputStream fileOutputStream = openFileOutput(MainActivity.fileName, Context.MODE_PRIVATE);
+                        ObjectOutputStream os= new ObjectOutputStream(fileOutputStream);
+                        os.writeObject(MainActivity.user);
+                        os.close();
+                    }catch (FileNotFoundException e){
+                        e.printStackTrace();
+                    }catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     List<Map<String,String>> data = new ArrayList<Map<String,String>>();
                     for(int i=0;i<photos.get(position).tagNames.size();i++){
                         Map<String,String> dataMaps = new HashMap<String,String>(2);
@@ -262,31 +279,82 @@ public class DisplayPhoto extends AppCompatActivity {
         });
 
 
-        //
+        Button canceldelete = (Button) findViewById(R.id.canceldelete);
+        canceldelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button canceldelete = (Button) findViewById(R.id.canceldelete);
+                canceldelete.setVisibility(View.INVISIBLE);
+                Button deletetag = (Button) findViewById(R.id.deletetag);
+                deletetag.setVisibility(View.VISIBLE);
+                Button addtag = (Button) findViewById(R.id.addtag);
+                addtag.setVisibility(View.VISIBLE);
+                viewPager.setEnabled(true);
+                Button move = (Button) findViewById(R.id.move);
+                move.setEnabled(true);
+                ListView tags= (ListView) findViewById(R.id.tags);
+                tags.setOnItemClickListener(null);
+            }
+        });
 
         Button deletetag = (Button) findViewById(R.id.deletetag);
         deletetag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //stop everything else
+                Button canceldelete = (Button) findViewById(R.id.canceldelete);
+                canceldelete.setVisibility(View.VISIBLE);
+                Button deletetag = (Button) findViewById(R.id.deletetag);
+                deletetag.setVisibility(View.INVISIBLE);
+                Button addtag = (Button) findViewById(R.id.addtag);
+                addtag.setVisibility(View.INVISIBLE);
+                viewPager.setEnabled(false);
+                Button move = (Button) findViewById(R.id.move);
+                move.setEnabled(false);
+
+                Toast.makeText(getBaseContext(),"Now please click on a tag to delete!",Toast.LENGTH_SHORT).show();
                 ListView tags= (ListView) findViewById(R.id.tags);
                 tags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(AdapterView<?> parent, View view, int position3, long id) {
                         ListView tags= (ListView) findViewById(R.id.tags);
-                        String tempType = tags.getItemAtPosition(position).toString().split(",")[0].substring(tags.getItemAtPosition(position).toString().split(",")[0].indexOf("=")+1);
-                        String tempValue = tags.getItemAtPosition(position).toString().split(",")[1].substring(tags.getItemAtPosition(position).toString().split(",")[1].indexOf("=")+1,tags.getItemAtPosition(position).toString().split(",")[1].length()-1);
-                        //System.out.println(tempType);
-                        //System.out.println(tempValue);
+                        System.out.println(tags.getItemAtPosition(position3).toString().split(",")[1].trim());
+                        String tempType = tags.getItemAtPosition(position3).toString().split(",")[0].substring(tags.getItemAtPosition(position3).toString().split(",")[0].indexOf("=")+1);
+                        String tempValue = tags.getItemAtPosition(position3).toString().split(",")[1].trim().substring(tags.getItemAtPosition(position3).toString().split(",")[1].trim().indexOf("=")+1,tags.getItemAtPosition(position3).toString().split(",")[1].trim().length()-1);
+                        System.out.println(tempType);
+                        System.out.println(tempValue);
                         tags.setOnItemClickListener(null);
                         for(int i=0;i<photos.get(position).tagNames.size();i++){
                             if(photos.get(position).tagNames.get(i).compareTo(tempType)==0){
                                 if (photos.get(position).tagValues.get(i).compareTo(tempValue)==0){
                                     photos.get(position).tagNames.remove(i);
                                     photos.get(position).tagValues.remove(i);
+                                    try {
+                                        File userInfo = new File(MainActivity.fileName);
+                                        FileOutputStream fileOutputStream = openFileOutput(MainActivity.fileName, Context.MODE_PRIVATE);
+                                        ObjectOutputStream os= new ObjectOutputStream(fileOutputStream);
+                                        os.writeObject(MainActivity.user);
+                                        os.close();
+                                    }catch (FileNotFoundException e){
+                                        e.printStackTrace();
+                                    }catch (IOException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
                                     break;
                                 }
                             }
                         }
+                        //put it all back to normal after click
+                        Button canceldelete = (Button) findViewById(R.id.canceldelete);
+                        canceldelete.setVisibility(View.INVISIBLE);
+                        Button deletetag = (Button) findViewById(R.id.deletetag);
+                        deletetag.setVisibility(View.VISIBLE);
+                        Button addtag = (Button) findViewById(R.id.addtag);
+                        addtag.setVisibility(View.VISIBLE);
+                        viewPager.setEnabled(true);
+                        Button move = (Button) findViewById(R.id.move);
+                        move.setEnabled(true);
                         List<Map<String,String>> data = new ArrayList<Map<String,String>>();
                         for(int i=0;i<photos.get(position).tagNames.size();i++){
                             Map<String,String> dataMaps = new HashMap<String,String>(2);
@@ -349,7 +417,7 @@ public class DisplayPhoto extends AppCompatActivity {
     public void onBackPressed()
     {
         super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, AlbumPhoto.class));
         finish();
 
     }

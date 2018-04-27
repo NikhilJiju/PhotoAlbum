@@ -51,7 +51,7 @@ public class AlbumList extends AppCompatActivity {
                         boolean unoriginal= false;
                         Album next= MainActivity.user.albums.get(position);
                         for(int i=0; i<next.photos.size(); i++){
-                            if(previous.photos.get(deletepos).photo.equals(next.photos.get(i).photo)){
+                            if(previous.photos.get(deletepos).photo.compareTo(next.photos.get(i).photo)==0){
                                 unoriginal= true;
                                 AlertDialog alertDialog = new AlertDialog.Builder(AlbumList.this).create();
                                 alertDialog.setMessage("This photo already exists in selected Album");
