@@ -50,7 +50,7 @@ public class AlbumPhoto extends AppCompatActivity {
                 e.printStackTrace();
             }
         }*/
-
+        System.out.println("HFSDKF " + album.photos.size());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_photo);
         setTitle(album.albumName);
@@ -184,6 +184,7 @@ public class AlbumPhoto extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DisplayPhoto.photos= album.photos;
                 DisplayPhoto.position = position;
+                DisplayPhoto.currentalbum= album;
                 Intent photoIntent= new Intent(getApplicationContext(), DisplayPhoto.class);
                 startActivity(photoIntent);
             }
@@ -265,11 +266,12 @@ public class AlbumPhoto extends AppCompatActivity {
             else{
                 holder= (ViewHolder) convertView.getTag();
             }
-            System.out.print(photos.get(position).photo);
+            //System.out.print(photos.get(position).photo);
             if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
                 System.out.println("we have permission");
                 //String filePath = adding_photo.getPathFromURI(AlbumPhoto.this,Uri.parse(photos.get(position).photo));
                 //long size = ThemedSpinnerAdapter.Helper.GetFileSize(getActivity(),filePath);
+                System.out.println("THIS CRAZY NUMBER " + photos.get(position));
                 File F = new File(photos.get(position).photo);
                 holder.photo.setImageURI(Uri.fromFile(F));
             }else{
