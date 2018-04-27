@@ -190,6 +190,8 @@ public class AlbumPhoto extends AppCompatActivity {
             }
         });
 
+
+
         Button delete = (Button) findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@ import java.io.ObjectOutputStream;
 public class AlbumList extends AppCompatActivity {
     static int deletepos;
     static Album previous;
-    static Photo deleted; //previous.photos.get(deletepos);
+   // static Photo deleted; //previous.photos.get(deletepos);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +67,7 @@ public class AlbumList extends AppCompatActivity {
                         if(!unoriginal){
                             next.photos.add(previous.photos.get(deletepos));
                             previous.photos.remove(deletepos);
-                            System.out.println("CHECK THIS OUT " + deleted);
+                            //System.out.println("CHECK THIS OUT " + deleted);
                             AlbumPhoto.album= next;
                             try {
                                 File userInfo = new File(MainActivity.fileName);

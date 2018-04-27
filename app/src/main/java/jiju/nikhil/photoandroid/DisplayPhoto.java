@@ -33,6 +33,7 @@ public class DisplayPhoto extends AppCompatActivity {
     static int position;
     ViewPager viewPager;
     public String tagtype;
+    static Album currentalbum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +151,17 @@ public class DisplayPhoto extends AppCompatActivity {
                     //disable add tag button
                     submit.setEnabled(false);
                 }
+            }
+        });
+
+        Button move = (Button) findViewById(R.id.move);
+        move.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlbumList.deletepos= position;
+                AlbumList.previous= currentalbum;
+                Intent photoIntent= new Intent(getApplicationContext(), AlbumList.class);
+                startActivity(photoIntent);
             }
         });
 
