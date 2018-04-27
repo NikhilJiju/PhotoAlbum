@@ -1,6 +1,7 @@
 package jiju.nikhil.photoandroid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -80,7 +81,7 @@ public class SearchPhoto extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Spinner logic = (Spinner) findViewById(R.id.logic);
                 logicChosen = logic.getSelectedItem().toString();
-                Toast.makeText(getBaseContext(),logicChosen,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),logicChosen,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -150,6 +151,7 @@ public class SearchPhoto extends AppCompatActivity {
                     logic.setEnabled(false);
                     Button search = (Button) findViewById(R.id.search);
                     search.setEnabled(true);
+                    tagvalue.setText("");
                 }else{
                     Toast.makeText(getBaseContext(),"Tag already inserted",Toast.LENGTH_SHORT).show();
                 }
@@ -173,6 +175,10 @@ public class SearchPhoto extends AppCompatActivity {
                 logic.setEnabled(true);
                 Button search = (Button) findViewById(R.id.search);
                 search.setEnabled(false);
+
+                //clear photo results list too
+                ListView thephotos= (ListView) findViewById(R.id.results);
+                thephotos.setAdapter(null);
             }
         });
 
@@ -246,6 +252,8 @@ public class SearchPhoto extends AppCompatActivity {
                 ListView thephotos= (ListView) findViewById(R.id.results);
                 SearchPhoto.MyAdapter myAdapter= new SearchPhoto.MyAdapter(SearchPhoto.this,matches);
                 thephotos.setAdapter(myAdapter);
+
+
             }
         });
 
@@ -289,6 +297,15 @@ public class SearchPhoto extends AppCompatActivity {
             ImageView photo;
             TextView caption;
         }
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
 
     }
 }
