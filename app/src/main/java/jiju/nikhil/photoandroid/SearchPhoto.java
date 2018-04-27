@@ -1,7 +1,6 @@
 package jiju.nikhil.photoandroid;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +47,7 @@ public class SearchPhoto extends AppCompatActivity {
 
         //add options for tag types.
         String[] options = new String[] {"Person:", "Location:"};
-        Spinner tagtypes = (Spinner) findViewById(R.id.tagtype);
+        Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tagtypes.setAdapter(adapter);
@@ -57,7 +56,7 @@ public class SearchPhoto extends AppCompatActivity {
         tagtypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Spinner tagtypes = (Spinner) findViewById(R.id.tagtype);
+                Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
                 tagtype = tagtypes.getSelectedItem().toString();
                 //Toast.makeText(getBaseContext(),tagtype,Toast.LENGTH_SHORT).show();
             }

@@ -1,7 +1,6 @@
 package jiju.nikhil.photoandroid;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +18,6 @@ import java.util.ArrayList;
 public class DisplayPhoto extends AppCompatActivity {
     static ArrayList<Photo> photos= new ArrayList<Photo>();
     static int position;
-    static Album currentalbum;
-    static Photo currentphoto;
     ViewPager viewPager;
 
     @Override
@@ -29,17 +25,7 @@ public class DisplayPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_photo);
 
-        Button move = (Button) findViewById(R.id.move);
-        move.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlbumList.deletepos= position;
-                AlbumList.previous= currentalbum;
-                AlbumList.deleted= currentphoto;
-                Intent photoIntent= new Intent(getApplicationContext(), AlbumList.class);
-                startActivity(photoIntent);
-            }
-        });
+
 
         viewPager= (ViewPager) findViewById(R.id.picslide);
         ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(this);
@@ -55,7 +41,6 @@ public class DisplayPhoto extends AppCompatActivity {
                 // Check if this is the page you want.
                 TextView texter= (TextView) findViewById(R.id.texter);
                 texter.setText(photos.get(position).name);
-                currentphoto= photos.get(position);
             }
         });
 

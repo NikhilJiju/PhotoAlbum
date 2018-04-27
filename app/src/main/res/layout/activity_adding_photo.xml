@@ -70,7 +70,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/path"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/doggy" />
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <Button
         android:id="@+id/add"
@@ -121,7 +121,7 @@
         app:layout_constraintVertical_bias="0.425" />
 
     <Spinner
-        android:id="@+id/tagtype"
+        android:id="@+id/tagtypes"
         android:layout_width="187dp"
         android:layout_height="45dp"
         android:layout_marginBottom="8dp"

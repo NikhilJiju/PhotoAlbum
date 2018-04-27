@@ -84,7 +84,7 @@
         app:layout_constraintVertical_bias="0.038" />
 
     <Spinner
-        android:id="@+id/tagtype"
+        android:id="@+id/tagtypes"
         android:layout_width="122dp"
         android:layout_height="39dp"
         android:layout_marginBottom="8dp"
@@ -110,7 +110,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tags"
         app:layout_constraintEnd_toStartOf="@+id/logic"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tagtype"
+        app:layout_constraintStart_toEndOf="@+id/tagtypes"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.615" />
 

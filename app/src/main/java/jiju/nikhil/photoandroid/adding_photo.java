@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -100,7 +97,7 @@ public class adding_photo extends AppCompatActivity {
 
         //add options for tag types.
         String[] options = new String[] {"Person:", "Location:"};
-        Spinner tagtypes = (Spinner) findViewById(R.id.tagtype);
+        Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tagtypes.setAdapter(adapter);
@@ -109,7 +106,7 @@ public class adding_photo extends AppCompatActivity {
         tagtypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Spinner tagtypes = (Spinner) findViewById(R.id.tagtype);
+                Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
                 tagtype = tagtypes.getSelectedItem().toString();
                 //Toast.makeText(getBaseContext(),tagtype,Toast.LENGTH_SHORT).show();
             }
@@ -121,9 +118,9 @@ public class adding_photo extends AppCompatActivity {
         });
 
         //only once they type in tag value, so add tag get enabled
-        EditText tagtext = (EditText) findViewById(R.id.tagvalue);
+        EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
         Button addtag = (Button) findViewById(R.id.addtag);
-        tagtext.addTextChangedListener(new TextWatcher() {
+        tagvalue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -210,7 +207,7 @@ public class adding_photo extends AppCompatActivity {
             selectedImage = imageReturnedIntent.getData();
             boolean duplicate = false;
             for(int x=0;x<AlbumPhoto.album.photos.size();x++){
-                if(selectedImage.compareTo(Uri.parse(AlbumPhoto.album.photos.get(x).photo))==0){
+                if(adding_photo.getPathFromURI(this,selectedImage).compareTo(AlbumPhoto.album.photos.get(x).photo)==0){
                     //duplicate photo
                     duplicate = true;
                     break;
@@ -220,7 +217,8 @@ public class adding_photo extends AppCompatActivity {
                 ImageView preview = (ImageView) findViewById(R.id.preview);
                 EditText path = (EditText) findViewById(R.id.path);
                 System.out.println(selectedImage.getPath());
-                path.setText(selectedImage.getPath().substring(selectedImage.getPath().lastIndexOf('/'), selectedImage.getPath().length()));
+                //path.setText(selectedImage.getPath().substring(selectedImage.getPath().lastIndexOf('/'), selectedImage.getPath().length()));
+                path.setText(adding_photo.getPathFromURI(this,selectedImage).substring(adding_photo.getPathFromURI(this,selectedImage).lastIndexOf('/')+1));
                 //preview.setImageURI(selectedImage);
                 String testing = selectedImage.getPath();
 
