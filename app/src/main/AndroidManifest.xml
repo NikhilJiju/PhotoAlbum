@@ -25,8 +25,11 @@
         <activity
             android:name=".DisplayPhoto"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".adding_photo" />
-        <activity android:name=".SearchPhoto"></activity>
+        <activity android:name=".adding_photo"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".SearchPhoto"
+            android:windowSoftInputMode="adjustPan"
+            ></activity>
     </application>
 
 </manifest>
