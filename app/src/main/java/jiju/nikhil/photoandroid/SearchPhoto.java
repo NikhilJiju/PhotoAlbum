@@ -187,53 +187,57 @@ public class SearchPhoto extends AppCompatActivity {
                 matches.clear();
                 matched=false;
                 matched2=false;
-                for(int i=0;i<AlbumPhoto.album.photos.size();i++){ //iterate through all photos in album
-                    Photo photo = AlbumPhoto.album.photos.get(i);
-                    if(logicChosen.compareTo("or")==0){ //OR LOGIC
-                        for(int j =0;j<photo.tagNames.size();j++){ //iterate through all tags for a photo
-                            String checkName = photo.tagNames.get(j);
-                            String checkValue = photo.tagValues.get(j);
-                            for(int k = 0;k<tagNames.size();k++){ //iterate through search tags to look for a match
-                                if(tagNames.get(k).compareTo(checkName)==0){
-                                    if(tagValues.get(k).compareTo(checkValue)==0){
-                                        //photo meets the requirement
-                                        matches.add(photo);
-                                        matched=true;
-                                        break;
+                for(int n=0; n<MainActivity.user.albums.size();n++){
+                    Album checkal= MainActivity.user.albums.get(n);
+                    for(int i=0;i<checkal.photos.size();i++){ //iterate through all photos in album
+                        Photo photo = checkal.photos.get(i);
+                        if(logicChosen.compareTo("or")==0){ //OR LOGIC
+                            for(int j =0;j<photo.tagNames.size();j++){ //iterate through all tags for a photo
+                                String checkName = photo.tagNames.get(j);
+                                String checkValue = photo.tagValues.get(j);
+                                for(int k = 0;k<tagNames.size();k++){ //iterate through search tags to look for a match
+                                    if(tagNames.get(k).compareTo(checkName)==0){
+                                        if(tagValues.get(k).compareTo(checkValue)==0){
+                                            //photo meets the requirement
+                                            matches.add(photo);
+                                            matched=true;
+                                            break;
+                                        }
                                     }
                                 }
+                                if(matched){
+                                    matched=false; //reset matched
+                                    break;  //move on to the next photo
+                                }
                             }
-                            if(matched){
-                                matched=false; //reset matched
-                                break;  //move on to the next photo
-                            }
-                        }
-                    }else{  //AND LOGIC
-                        for(int j =0;j<tagNames.size();j++){ //iterate through all search tags
-                            String checkName = tagNames.get(j);
-                            String checkValue = tagValues.get(j);
-                            for(int k = 0;k<photo.tagNames.size();k++){ //iterate through all tags for a photo
-                                if(photo.tagNames.get(k).compareTo(checkName)==0){
-                                    if(photo.tagValues.get(k).compareTo(checkValue)==0){
-                                        //photo meets the requirement
-                                        matched2=true;
-                                        break;
+                        }else{  //AND LOGIC
+                            for(int j =0;j<tagNames.size();j++){ //iterate through all search tags
+                                String checkName = tagNames.get(j);
+                                String checkValue = tagValues.get(j);
+                                for(int k = 0;k<photo.tagNames.size();k++){ //iterate through all tags for a photo
+                                    if(photo.tagNames.get(k).compareTo(checkName)==0){
+                                        if(photo.tagValues.get(k).compareTo(checkValue)==0){
+                                            //photo meets the requirement
+                                            matched2=true;
+                                            break;
+                                        }
                                     }
+                                }
+                                if(matched2){
+                                    //continue to move on to next tag
+                                }else{
+                                    matched2=false;
+                                    break;
+                                    //didn't meet one of the tag requirements, so break
                                 }
                             }
                             if(matched2){
-                                //continue to move on to next tag
-                            }else{
-                                matched2=false;
-                                break;
-                                //didn't meet one of the tag requirements, so break
+                                matches.add(photo);
                             }
-                        }
-                        if(matched2){
-                            matches.add(photo);
                         }
                     }
                 }
+
 
                 System.out.println(matches.size());
                 System.out.println("------------------------------------------");

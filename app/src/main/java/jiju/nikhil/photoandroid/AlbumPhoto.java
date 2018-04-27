@@ -42,14 +42,14 @@ public class AlbumPhoto extends AppCompatActivity {
     static Album album;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(Build.VERSION.SDK_INT>=24){
+        /*if(Build.VERSION.SDK_INT>=24){
             try{
                 Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
                 m.invoke(null);
             }catch(Exception e){
                 e.printStackTrace();
             }
-        }
+        }*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_photo);

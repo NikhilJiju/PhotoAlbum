@@ -168,8 +168,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button search = (Button) findViewById(R.id.search);
-        Button rename = (Button) findViewById(R.id.rename);
-        Button delete = (Button) findViewById(R.id.delete);
+        search.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoIntent= new Intent(getApplicationContext(), SearchPhoto.class);
+                startActivity(photoIntent);
+            }
+        });
     }
 
     @Override

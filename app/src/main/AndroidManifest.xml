@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jiju.nikhil.photoandroid">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,8 +27,13 @@
         <activity
             android:name=".DisplayPhoto"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".adding_photo" />
-        <activity android:name=".SearchPhoto"></activity>
+        <activity
+            android:name=".adding_photo"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SearchPhoto"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".AlbumList"></activity>
     </application>
 
 </manifest>

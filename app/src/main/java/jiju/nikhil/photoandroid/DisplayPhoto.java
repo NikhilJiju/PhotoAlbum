@@ -25,6 +25,8 @@ public class DisplayPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_photo);
 
+
+
         viewPager= (ViewPager) findViewById(R.id.picslide);
         ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(this);
         viewPager.setAdapter(viewPagerAdapter);
