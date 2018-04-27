@@ -1,6 +1,7 @@
 package jiju.nikhil.photoandroid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -220,11 +221,45 @@ public class DisplayPhoto extends AppCompatActivity {
             }
         });
 
+
+        //
+
         Button deletetag = (Button) findViewById(R.id.deletetag);
         deletetag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ListView tags= (ListView) findViewById(R.id.tags);
+                tags.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ListView tags= (ListView) findViewById(R.id.tags);
+                        String tempType = tags.getItemAtPosition(position).toString().split(",")[0].substring(tags.getItemAtPosition(position).toString().split(",")[0].indexOf("=")+1);
+                        String tempValue = tags.getItemAtPosition(position).toString().split(",")[1].substring(tags.getItemAtPosition(position).toString().split(",")[1].indexOf("=")+1,tags.getItemAtPosition(position).toString().split(",")[1].length()-1);
+                        //System.out.println(tempType);
+                        //System.out.println(tempValue);
+                        tags.setOnItemClickListener(null);
+                        for(int i=0;i<photos.get(position).tagNames.size();i++){
+                            if(photos.get(position).tagNames.get(i).compareTo(tempType)==0){
+                                if (photos.get(position).tagValues.get(i).compareTo(tempValue)==0){
+                                    photos.get(position).tagNames.remove(i);
+                                    photos.get(position).tagValues.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+                        List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+                        for(int i=0;i<photos.get(position).tagNames.size();i++){
+                            Map<String,String> dataMaps = new HashMap<String,String>(2);
+                            dataMaps.put("type",photos.get(position).tagNames.get(i));
+                            dataMaps.put("value",photos.get(position).tagValues.get(i));
+                            data.add(dataMaps);
+                        }
 
+                        SimpleAdapter adapter = new SimpleAdapter(DisplayPhoto.this,data,android.R.layout.simple_expandable_list_item_2,new String[]{"type","value"},new int[]{android.R.id.text1,android.R.id.text2});
+                        //ListView tags = (ListView) findViewById(R.id.tags);
+                        tags.setAdapter(adapter);
+                    }
+                });
             }
         });
 
