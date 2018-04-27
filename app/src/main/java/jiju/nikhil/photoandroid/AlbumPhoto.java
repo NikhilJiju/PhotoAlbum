@@ -1,10 +1,17 @@
 package jiju.nikhil.photoandroid;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,19 +25,32 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static jiju.nikhil.photoandroid.DisplayPhoto.position;
 
 public class AlbumPhoto extends AppCompatActivity {
     static Album album;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(Build.VERSION.SDK_INT>=24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_photo);
         setTitle(album.albumName);
@@ -42,8 +62,14 @@ public class AlbumPhoto extends AppCompatActivity {
         name.setVisibility(View.INVISIBLE);
 
         //setting listview
-        Photo one= new Photo("barnacles",R.drawable.doggy);
+        /*Photo one= new Photo("barnacles",R.drawable.doggy);
+        Photo two= new Photo("artists",R.drawable.artist);
+        Photo three= new Photo("melo", R.drawable.melo);
+        Photo four= new Photo("cousins",R.drawable.cousins);
         album.photos.add(one);
+        album.photos.add(two);
+        album.photos.add(three);
+        album.photos.add(four);*/
         final ListView thephotos= (ListView) findViewById(R.id.thephotos);
         MyAdapter myAdapter= new MyAdapter(AlbumPhoto.this,album.photos);
         thephotos.setAdapter(myAdapter);
@@ -72,7 +98,7 @@ public class AlbumPhoto extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoIntent= new Intent(getApplicationContext(), AlbumPhoto.class);
+                Intent photoIntent= new Intent(getApplicationContext(), adding_photo.class);
                 startActivity(photoIntent);
                 //setContentView(R.layout.album_photo);
             }
@@ -156,7 +182,8 @@ public class AlbumPhoto extends AppCompatActivity {
         photos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DisplayPhoto.photo= (Photo) thephotos.getItemAtPosition(position);
+                DisplayPhoto.photos= album.photos;
+                DisplayPhoto.position = position;
                 Intent photoIntent= new Intent(getApplicationContext(), DisplayPhoto.class);
                 startActivity(photoIntent);
             }
@@ -238,7 +265,18 @@ public class AlbumPhoto extends AppCompatActivity {
             else{
                 holder= (ViewHolder) convertView.getTag();
             }
-            holder.photo.setImageResource(photos.get(position).photo);
+            System.out.print(photos.get(position).photo);
+            if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                System.out.println("we have permission");
+                //String filePath = adding_photo.getPathFromURI(AlbumPhoto.this,Uri.parse(photos.get(position).photo));
+                //long size = ThemedSpinnerAdapter.Helper.GetFileSize(getActivity(),filePath);
+                File F = new File(photos.get(position).photo);
+                holder.photo.setImageURI(Uri.fromFile(F));
+            }else{
+                System.out.println("PERMISSION IS NOT!");
+                ActivityCompat.requestPermissions(AlbumPhoto.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
+            }
+            //holder.photo.setImageURI(Uri.parse(photos.get(position).photo));
             holder.caption.setText(photos.get(position).name);
             return convertView;
         }
@@ -249,4 +287,5 @@ public class AlbumPhoto extends AppCompatActivity {
         }
 
     }
+
 }

@@ -1,10 +1,14 @@
 package jiju.nikhil.photoandroid;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.nfc.Tag;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -56,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             user= new User();
+        }
+
+        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+            System.out.println("PERMISSION IS GRANTED CORRECTLY!");
+        }else{
+            System.out.println("PERMISSION IS NOT!");
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
         }
 
         Button add = (Button) findViewById(R.id.add);
@@ -183,7 +195,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        if(requestCode==0){
+            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                System.out.println("Permission GRANTED again");
+            }else{
+                System.out.println("Permission denied again");
+                System.exit(0);
+            }
+        }
+    }
 
 
 }
