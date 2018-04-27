@@ -6,26 +6,51 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DisplayPhoto extends AppCompatActivity {
     static ArrayList<Photo> photos= new ArrayList<Photo>();
     static int position;
     ViewPager viewPager;
+    public String tagtype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_photo);
 
+        System.out.println("----------------------------"+photos.get(position).tagNames.size());
+        List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+        for(int i=0;i<photos.get(position).tagNames.size();i++){
+            Map<String,String> dataMaps = new HashMap<String,String>(2);
+            dataMaps.put("type",photos.get(position).tagNames.get(i));
+            dataMaps.put("value",photos.get(position).tagValues.get(i));
+            data.add(dataMaps);
+            System.out.println("GOT HERE!!!!!");
+        }
 
+        SimpleAdapter adapter = new SimpleAdapter(DisplayPhoto.this,data,android.R.layout.simple_expandable_list_item_2,new String[]{"type","value"},new int[]{android.R.id.text1,android.R.id.text2});
+        ListView tags = (ListView) findViewById(R.id.tags);
+        tags.setAdapter(adapter);
 
         viewPager= (ViewPager) findViewById(R.id.picslide);
         ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(this);
@@ -41,8 +66,168 @@ public class DisplayPhoto extends AppCompatActivity {
                 // Check if this is the page you want.
                 TextView texter= (TextView) findViewById(R.id.texter);
                 texter.setText(photos.get(position).name);
+                System.out.println("----------------------------"+photos.get(position).tagNames.size());
+                List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+                for(int i=0;i<photos.get(position).tagNames.size();i++){
+                    Map<String,String> dataMaps = new HashMap<String,String>(2);
+                    dataMaps.put("type",photos.get(position).tagNames.get(i));
+                    dataMaps.put("value",photos.get(position).tagValues.get(i));
+                    data.add(dataMaps);
+                    System.out.println("GOT HERE!!!!!");
+                }
+
+                SimpleAdapter adapter = new SimpleAdapter(DisplayPhoto.this,data,android.R.layout.simple_expandable_list_item_2,new String[]{"type","value"},new int[]{android.R.id.text1,android.R.id.text2});
+                ListView tags = (ListView) findViewById(R.id.tags);
+                tags.setAdapter(adapter);
+
             }
         });
+
+
+        Button addtag = (Button) findViewById(R.id.addtag);
+        addtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button submit = (Button) findViewById(R.id.submit);
+                Button cancel = (Button) findViewById(R.id.cancel);
+                EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+                Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
+                Button addtag = (Button) findViewById(R.id.addtag);
+                Button deletetag = (Button) findViewById(R.id.deletetag);
+                submit.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                tagvalue.setVisibility(View.VISIBLE);
+                tagtypes.setVisibility(View.VISIBLE);
+                addtag.setVisibility(View.INVISIBLE);
+                deletetag.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //add options for tag types.
+        String[] options = new String[] {"Person:", "Location:"};
+        Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tagtypes.setAdapter(adapter2);
+
+
+        tagtypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
+                tagtype = tagtypes.getSelectedItem().toString();
+                //Toast.makeText(getBaseContext(),tagtype,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(getBaseContext(),"Nothing selected",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //only once they type in tag value, so add tag get enabled
+        EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+        tagvalue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+                Button submit = (Button) findViewById(R.id.submit);
+                if(tagvalue.getText().toString().trim().compareTo("")!=0){ // text is not empty
+                    //enable add tag button
+                    submit.setEnabled(true);
+                }else{
+                    //disable add tag button
+                    submit.setEnabled(false);
+                }
+            }
+        });
+
+        Button submit = (Button) findViewById(R.id.submit);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+                boolean repeat = false;
+                for(int i=0;i<photos.get(position).tagNames.size();i++){
+                    if(photos.get(position).tagNames.get(i).compareTo(tagtype)==0){
+                        if (photos.get(position).tagValues.get(i).compareTo(tagvalue.getText().toString())==0){
+                            repeat = true;
+                            break;
+                        }
+                    }
+                }
+                if(!repeat){
+                    photos.get(position).tagValues.add(tagvalue.getText().toString());
+                    photos.get(position).tagNames.add(tagtype);
+                    List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+                    for(int i=0;i<photos.get(position).tagNames.size();i++){
+                        Map<String,String> dataMaps = new HashMap<String,String>(2);
+                        dataMaps.put("type",photos.get(position).tagNames.get(i));
+                        dataMaps.put("value",photos.get(position).tagValues.get(i));
+                        data.add(dataMaps);
+                    }
+
+                    SimpleAdapter adapter = new SimpleAdapter(DisplayPhoto.this,data,android.R.layout.simple_expandable_list_item_2,new String[]{"type","value"},new int[]{android.R.id.text1,android.R.id.text2});
+                    ListView tags = (ListView) findViewById(R.id.tags);
+                    tags.setAdapter(adapter);
+                    Button submit = (Button) findViewById(R.id.submit);
+                    Button cancel = (Button) findViewById(R.id.cancel);
+                    //EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+                    Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
+                    Button addtag = (Button) findViewById(R.id.addtag);
+                    Button deletetag = (Button) findViewById(R.id.deletetag);
+                    tagvalue.setText("");
+                    submit.setVisibility(View.INVISIBLE);
+                    cancel.setVisibility(View.INVISIBLE);
+                    tagvalue.setVisibility(View.INVISIBLE);
+                    tagtypes.setVisibility(View.INVISIBLE);
+                    addtag.setVisibility(View.VISIBLE);
+                    deletetag.setVisibility(View.VISIBLE);
+                }else{
+                    Toast.makeText(getBaseContext(),"Tag already inserted",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        Button cancel = (Button) findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button submit = (Button) findViewById(R.id.submit);
+                Button cancel = (Button) findViewById(R.id.cancel);
+                EditText tagvalue = (EditText) findViewById(R.id.tagvalue);
+                Spinner tagtypes = (Spinner) findViewById(R.id.tagtypes);
+                Button addtag = (Button) findViewById(R.id.addtag);
+                Button deletetag = (Button) findViewById(R.id.deletetag);
+                tagvalue.setText("");
+                submit.setVisibility(View.INVISIBLE);
+                cancel.setVisibility(View.INVISIBLE);
+                tagvalue.setVisibility(View.INVISIBLE);
+                tagtypes.setVisibility(View.INVISIBLE);
+                addtag.setVisibility(View.VISIBLE);
+                deletetag.setVisibility(View.VISIBLE);
+            }
+        });
+
+        Button deletetag = (Button) findViewById(R.id.deletetag);
+        deletetag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
     }
 
