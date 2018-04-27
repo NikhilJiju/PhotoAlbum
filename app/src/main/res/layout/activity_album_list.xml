@@ -7,6 +7,7 @@
     tools:context=".AlbumList">
 
     <ListView
+        android:id="@+id/albumlist"
         android:layout_width="302dp"
         android:layout_height="372dp"
         android:layout_marginBottom="8dp"
