@@ -281,7 +281,7 @@ public class AlbumPhoto extends AppCompatActivity {
                 ActivityCompat.requestPermissions(AlbumPhoto.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},0);
             }
             //holder.photo.setImageURI(Uri.parse(photos.get(position).photo));
-            holder.caption.setText(photos.get(position).name);
+            holder.caption.setText(photos.get(position).photo);
             return convertView;
         }
 

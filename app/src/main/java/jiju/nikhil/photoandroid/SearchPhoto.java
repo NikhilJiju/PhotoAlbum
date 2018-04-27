@@ -274,7 +274,7 @@ public class SearchPhoto extends AppCompatActivity {
                 LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
                 convertView = mInflater.inflate(R.layout.listview_item, parent, false);
                 holder.photo = (ImageView) convertView.findViewById(R.id.imageView);
-                holder.caption = (TextView) convertView.findViewById(R.id.textView);
+                //holder.caption = (TextView) convertView.findViewById(R.id.textView);
                 convertView.setTag(holder);
             }
             else{

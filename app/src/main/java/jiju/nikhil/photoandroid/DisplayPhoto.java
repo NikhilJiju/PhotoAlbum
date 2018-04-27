@@ -23,6 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,6 +156,29 @@ public class DisplayPhoto extends AppCompatActivity {
                     //disable add tag button
                     submit.setEnabled(false);
                 }
+            }
+        });
+
+        Button delete = (Button) findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentalbum.photos.remove(position);
+                //save action
+                try {
+                    File userInfo = new File(MainActivity.fileName);
+                    FileOutputStream fileOutputStream = openFileOutput(MainActivity.fileName, Context.MODE_PRIVATE);
+                    ObjectOutputStream os= new ObjectOutputStream(fileOutputStream);
+                    os.writeObject(MainActivity.user);
+                    os.close();
+                }catch (FileNotFoundException e){
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Intent photoIntent= new Intent(getApplicationContext(), AlbumPhoto.class);
+                startActivity(photoIntent);
             }
         });
 
