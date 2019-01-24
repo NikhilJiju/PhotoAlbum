@@ -1,0 +1,1 @@
+This repository contains code for a photo ablum Android App. The app allows for the user to create albums and add photos. It also displays the photos and allows for the user to search for added photos through tags or date added.
